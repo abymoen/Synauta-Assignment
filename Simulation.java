@@ -20,6 +20,7 @@ public class Simulation {
   public void startSimulation() {
     String[] startingStringArry = getStartCommand();
     placeRobotOnBoard(startingStringArry[1]);
+    moveRobotOnBoard();
   }
 
 
@@ -55,6 +56,51 @@ public class Simulation {
     if(direction.equals("SOUTH")) return 2;
     if(direction.equals("WEST")) return 3;
     throw new IllegalArgumentException("Invalid Direction");
+  }
+
+  public String parseIntDirection() {
+    if(this.directionFacing == 0) return "NORTH";
+    if(this.directionFacing == 1) return "EAST";
+    if(this.directionFacing == 2) return "SOUTH";
+    if(this.directionFacing == 3) return "WEST";
+    throw new IllegalArgumentException("Invalid Direction");
+  }
+
+  public void moveRobotOnBoard() {
+    String str;
+    try {
+      str = this.inputReader.readLine();
+      while(str != null) {
+        parseAction(str);
+        str = this.inputReader.readLine();
+      }
+    } catch(IOException e) {
+      System.out.println("Error reading from file");
+      e.printStackTrace();
+    }
+  }
+
+  public void parseAction(String action) {
+    if(action.equals("MOVE")) moveRobot();
+    if(action.equals("LEFT")) turnRobotLeft();
+    if(action.equals("RIGHT")) turnRobotRight();
+    if(action.equals("REPORT")) reportLocation();
+  }
+
+  public void moveRobot() {
+
+  }
+
+  public void turnRobotLeft() {
+
+  }
+
+  public void turnRobotRight() {
+
+  }
+
+  public void reportLocation() {
+    System.out.printf("%s,%s,"+parseIntDirection()+"%n", this.currentX, this.currentY);
   }
 
   public int getCurrentX() {
