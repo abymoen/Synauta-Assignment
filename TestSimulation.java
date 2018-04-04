@@ -43,4 +43,38 @@ public class TestSimulation {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void testTurnRobot() {
+    try {
+      //In the test file, the robot starts facing north
+      Simulation sim = new Simulation(new BufferedReader(new FileReader("TestInput.txt")));
+      sim.setCurrentX(1);
+      sim.setCurrentX(2);
+      sim.setDirectionFacing(0);
+      assertEquals(0, sim.getDirectionFacing());
+      sim.turnRobotLeft();
+      assertEquals(3, sim.getDirectionFacing());
+      sim.turnRobotRight();
+      assertEquals(0, sim.getDirectionFacing());
+      sim.turnRobotRight();
+      assertEquals(1, sim.getDirectionFacing());
+      sim.turnRobotRight();
+      assertEquals(2, sim.getDirectionFacing());
+      sim.turnRobotRight();
+      assertEquals(3, sim.getDirectionFacing());
+      sim.turnRobotRight();
+      assertEquals(0, sim.getDirectionFacing());
+      sim.turnRobotLeft();
+      assertEquals(3, sim.getDirectionFacing());
+      sim.turnRobotLeft();
+      assertEquals(2, sim.getDirectionFacing());
+      sim.turnRobotLeft();
+      assertEquals(1, sim.getDirectionFacing());
+      sim.turnRobotLeft();
+      assertEquals(0, sim.getDirectionFacing());
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
 }

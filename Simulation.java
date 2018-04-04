@@ -92,17 +92,18 @@ public class Simulation {
   }
 
   public void turnRobotLeft() {
-
+    this.directionFacing = (this.directionFacing+3)%4;
   }
 
   public void turnRobotRight() {
-
+    this.directionFacing = (this.directionFacing+1)%4;
   }
 
   public void reportLocation() {
     System.out.printf("%s,%s,"+parseIntDirection()+"%n", this.currentX, this.currentY);
   }
 
+  //Getters and Setters used for unit testing
   public int getCurrentX() {
     return this.currentX;
   }
@@ -113,5 +114,17 @@ public class Simulation {
 
   public int getDirectionFacing() {
     return this.directionFacing;
+  }
+
+  public void setCurrentX(int x) {
+    this.currentX = x;
+  }
+
+  public void setCurrentY(int y) {
+    this.currentY = y;
+  }
+
+  public void setDirectionFacing(int direction) {
+    this.directionFacing = direction;
   }
 }
