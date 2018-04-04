@@ -22,6 +22,14 @@ public class Simulation {
   }
 
   public void clearGarbageInput() {
+    String input = this.inputScanner.next();
+    while(!isStartString(input)) {
+      input = this.inputScanner.next();
+    }
+  }
 
+  public boolean isStartString(String eval) {
+    if(eval == "PLACE") return true;
+    return false;
   }
 }
