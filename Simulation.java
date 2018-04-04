@@ -87,8 +87,17 @@ public class Simulation {
     if(action.equals("REPORT")) reportLocation();
   }
 
+  // Actual logic for moving the robot on the board
   public void moveRobot() {
+    if(!checkMovePossible()) return;
+    this.currentX += xMovements[directionFacing];
+    this.currentY += yMovements[directionFacing];
+  }
 
+  public boolean checkMovePossible() {
+    if(this.currentX + xMovements[directionFacing] > 4 || this.currentY + yMovements[directionFacing] > 4) return false;
+    if(this.currentX + xMovements[directionFacing] < 0 || this.currentY + yMovements[directionFacing] < 0) return false;
+    return true;
   }
 
   public void turnRobotLeft() {
