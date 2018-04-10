@@ -2,7 +2,6 @@ import java.io.*;
 
 public class Simulation {
 
-  BufferedReader inputReader;
   // These integer arrays denote movement in the x and y direction based on the direction currently facing (N,E,S,W)
   private int[] xMovements;
   private int[] yMovements;
@@ -11,80 +10,64 @@ public class Simulation {
   private int currentX;
   private int currentY;
 
-  public Simulation(BufferedReader reader) {
-    this.inputReader = reader;
+  private String[] moveSet;
+
+  public Simulation(String moves) {
+    this.moveSet = moves.split("\\r|\\n");
     this.xMovements = new int[]{0,1,0,-1};
     this.yMovements = new int[]{1,0,-1,0};
   }
 
   public void startSimulation() {
-    String[] startingStringArry = getStartCommand();
-    placeRobotOnBoard(startingStringArry[1]);
-    moveRobotOnBoard();
+    int startingIndex = getStartCommand();
+    placeRobotOnBoard(startingIndex);
+    moveRobotOnBoard(startingIndex+1);
   }
 
 
-  public String[] getStartCommand() {
-    String[] str = new String[0];
-    try {
-      str = this.inputReader.readLine().split(" ");
-      while(!isStartString(str[0])) {
-        str = this.inputReader.readLine().split(" ");
-      }
-    } catch(IOException e) {
-      System.out.println("Error reading from file");
-      e.printStackTrace();
-    }
-    return str;
+  public int getStartCommand() {
+    int i = 0;
+    while(!this.moveSet[i].split(" ")[0].equals("PLACE")) {i++; if(i >= moveSet.length) break;}
+    return i;
   }
 
-  public boolean isStartString(String eval) {
-    if(eval.equals("PLACE")) return true;
-    return false;
-  }
-
-  public void placeRobotOnBoard(String location) {
-    String[] coordinates = location.split(",");
-    this.currentX = Integer.parseInt(coordinates[0]);
-    this.currentY = Integer.parseInt(coordinates[1]);
-    this.directionFacing = parseDirection(coordinates[2]);
+  public void placeRobotOnBoard(int index) {
+    String[] coordinates = moveSet[index].split("\\s|\\,");
+    this.currentX = Integer.parseInt(coordinates[1]);
+    this.currentY = Integer.parseInt(coordinates[2]);
+    this.directionFacing = parseDirection(coordinates[3]);
   }
 
   public int parseDirection(String direction) {
-    if(direction.equals("NORTH")) return 0;
-    if(direction.equals("EAST")) return 1;
-    if(direction.equals("SOUTH")) return 2;
-    if(direction.equals("WEST")) return 3;
+    switch (direction) {
+      case "NORTH": return 0;
+      case "EAST": return 1;
+      case "SOUTH": return 2;
+      case "WEST": return 3;
+    }
     throw new IllegalArgumentException("Invalid Direction");
   }
 
   public String parseIntDirection() {
-    if(this.directionFacing == 0) return "NORTH";
-    if(this.directionFacing == 1) return "EAST";
-    if(this.directionFacing == 2) return "SOUTH";
-    if(this.directionFacing == 3) return "WEST";
+    switch (this.directionFacing) {
+      case 0: return "NORTH";
+      case 1: return "EAST";
+      case 2: return "SOUTH";
+      case 3: return "WEST";
+    }
     throw new IllegalArgumentException("Invalid Direction");
   }
 
-  public void moveRobotOnBoard() {
-    String str;
-    try {
-      str = this.inputReader.readLine();
-      while(str != null) {
-        parseAction(str);
-        str = this.inputReader.readLine();
+  public void moveRobotOnBoard(int index) {
+    while(index < moveSet.length) {
+      switch (moveSet[index]) {
+        case "MOVE": moveRobot(); break;
+        case "LEFT": turnRobotLeft(); break;
+        case "RIGHT": turnRobotRight(); break;
+        case "REPORT": reportLocation(); break;
       }
-    } catch(IOException e) {
-      System.out.println("Error reading from file");
-      e.printStackTrace();
+      index++;
     }
-  }
-
-  public void parseAction(String action) {
-    if(action.equals("MOVE")) moveRobot();
-    if(action.equals("LEFT")) turnRobotLeft();
-    if(action.equals("RIGHT")) turnRobotRight();
-    if(action.equals("REPORT")) reportLocation();
   }
 
   // Actual logic for moving the robot on the board
